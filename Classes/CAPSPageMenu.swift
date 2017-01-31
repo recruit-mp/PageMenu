@@ -69,6 +69,7 @@ public enum CAPSPageMenuOption {
     case menuMargin(CGFloat)
     case menuItemMargin(CGFloat)
     case menuHeight(CGFloat)
+    case selectedMenuItemFontBold(Bool)
     case selectedMenuItemLabelColor(UIColor)
     case unselectedMenuItemLabelColor(UIColor)
     case useMenuLikeSegmentedControl(Bool)
@@ -123,6 +124,7 @@ open class CAPSPageMenu: UIViewController, UIScrollViewDelegate, UIGestureRecogn
     var lastPageIndex : Int = 0
     
     open var selectionIndicatorColor : UIColor = UIColor.white
+    open var selectedMenuItemFontBold : Bool = false
     open var selectedMenuItemLabelColor : UIColor = UIColor.white
     open var unselectedMenuItemLabelColor : UIColor = UIColor.lightGray
     open var scrollMenuBackgroundColor : UIColor = UIColor.black
@@ -219,6 +221,8 @@ open class CAPSPageMenu: UIViewController, UIScrollViewDelegate, UIGestureRecogn
                     menuItemMargin = value
                 case let .menuHeight(value):
                     menuHeight = value
+                case let .selectedMenuItemFontBold(value):
+                    selectedMenuItemFontBold = value
                 case let .selectedMenuItemLabelColor(value):
                     selectedMenuItemLabelColor = value
                 case let .unselectedMenuItemLabelColor(value):
@@ -504,6 +508,9 @@ open class CAPSPageMenu: UIViewController, UIScrollViewDelegate, UIGestureRecogn
         if menuItems.count > 0 {
             if menuItems[currentPageIndex].titleLabel != nil {
                 menuItems[currentPageIndex].titleLabel!.textColor = selectedMenuItemLabelColor
+                if selectedMenuItemFontBold {
+                    menuItems[currentPageIndex].titleLabel!.font = UIFont.boldSystemFont(ofSize: menuItemFont.pointSize)
+                }
             }
         }
         
@@ -818,6 +825,10 @@ open class CAPSPageMenu: UIViewController, UIScrollViewDelegate, UIGestureRecogn
                     if self.menuItems[self.lastPageIndex].titleLabel != nil && self.menuItems[self.currentPageIndex].titleLabel != nil {
                         self.menuItems[self.lastPageIndex].titleLabel!.textColor = self.unselectedMenuItemLabelColor
                         self.menuItems[self.currentPageIndex].titleLabel!.textColor = self.selectedMenuItemLabelColor
+                        if self.selectedMenuItemFontBold {
+                            self.menuItems[self.lastPageIndex].titleLabel!.font = self.menuItemFont
+                            self.menuItems[self.currentPageIndex].titleLabel!.font = UIFont.boldSystemFont(ofSize: self.menuItemFont.pointSize)
+                        }
                     }
                 }
             })
