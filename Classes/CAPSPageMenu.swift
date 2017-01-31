@@ -72,6 +72,7 @@ public enum CAPSPageMenuOption {
     case selectedMenuItemLabelColor(UIColor)
     case unselectedMenuItemLabelColor(UIColor)
     case useMenuLikeSegmentedControl(Bool)
+    case menuItemExtraWidth(CGFloat)
     case menuItemSeparatorRoundEdges(Bool)
     case menuItemFont(UIFont)
     case menuItemSeparatorPercentageHeight(CGFloat)
@@ -129,6 +130,7 @@ open class CAPSPageMenu: UIViewController, UIScrollViewDelegate, UIGestureRecogn
     open var bottomMenuHairlineColor : UIColor = UIColor.white
     open var menuItemSeparatorColor : UIColor = UIColor.lightGray
     
+    open var menuItemExtraWidth : CGFloat = 0.0
     open var menuItemFont : UIFont = UIFont.systemFont(ofSize: 15.0)
     open var menuItemSeparatorPercentageHeight : CGFloat = 0.2
     open var menuItemSeparatorWidth : CGFloat = 0.5
@@ -223,6 +225,8 @@ open class CAPSPageMenu: UIViewController, UIScrollViewDelegate, UIGestureRecogn
                     unselectedMenuItemLabelColor = value
                 case let .useMenuLikeSegmentedControl(value):
                     useMenuLikeSegmentedControl = value
+                case let .menuItemExtraWidth(value):
+                    menuItemExtraWidth = value
                 case let .menuItemSeparatorRoundEdges(value):
                     menuItemSeparatorRoundEdges = value
                 case let .menuItemFont(value):
@@ -420,8 +424,10 @@ open class CAPSPageMenu: UIViewController, UIScrollViewDelegate, UIGestureRecogn
                 let controllerTitle : String? = controller.title
                 
                 let titleText : String = controllerTitle != nil ? controllerTitle! : "Menu \(Int(index) + 1)"
-                
-                let itemWidthRect : CGRect = (titleText as NSString).boundingRect(with: CGSize(width: 1000, height: 1000), options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSFontAttributeName:menuItemFont], context: nil)
+
+                var itemWidthRect : CGRect = (titleText as NSString).boundingRect(with: CGSize(width: 1000, height: 1000), options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSFontAttributeName:menuItemFont], context: nil)
+
+                itemWidthRect.width = itemWidthRect.width + menuItemExtraWidth
                 
                 menuItemWidth = itemWidthRect.width
                 
