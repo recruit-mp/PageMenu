@@ -166,6 +166,22 @@ open class CAPSPageMenu: UIViewController, UIScrollViewDelegate, UIGestureRecogn
     
     var tapTimer : Timer?
     
+    var menuItemTapGestureRecognizer: UITapGestureRecognizer?
+    
+    open var isLock = false {
+        didSet {
+            if isLock {
+                menuScrollView.isScrollEnabled = false
+                controllerScrollView.isScrollEnabled = false
+                menuItemTapGestureRecognizer?.isEnabled = false
+            } else {
+                menuScrollView.isScrollEnabled = true
+                controllerScrollView.isScrollEnabled = true
+                menuItemTapGestureRecognizer?.isEnabled = true
+            }
+        }
+    }
+
     enum CAPSPageMenuScrollDirection : Int {
         case left
         case right
@@ -367,11 +383,13 @@ open class CAPSPageMenu: UIViewController, UIScrollViewDelegate, UIGestureRecogn
     
     func configureUserInterface() {
         // Add tap gesture recognizer to controller scroll view to recognize menu item selection
-        let menuItemTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(CAPSPageMenu.handleMenuItemTap(_:)))
-        menuItemTapGestureRecognizer.numberOfTapsRequired = 1
-        menuItemTapGestureRecognizer.numberOfTouchesRequired = 1
-        menuItemTapGestureRecognizer.delegate = self
-        menuScrollView.addGestureRecognizer(menuItemTapGestureRecognizer)
+        menuItemTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(CAPSPageMenu.handleMenuItemTap(_:)))
+        if let menuItemTapGestureRecognizer = menuItemTapGestureRecognizer {
+            menuItemTapGestureRecognizer.numberOfTapsRequired = 1
+            menuItemTapGestureRecognizer.numberOfTouchesRequired = 1
+            menuItemTapGestureRecognizer.delegate = self
+            menuScrollView.addGestureRecognizer(menuItemTapGestureRecognizer)
+        }
         
         // Set delegate for controller scroll view
         controllerScrollView.delegate = self
