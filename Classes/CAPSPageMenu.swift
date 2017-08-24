@@ -1115,4 +1115,22 @@ open class CAPSPageMenu: UIViewController, UIScrollViewDelegate, UIGestureRecogn
             })
         }
     }
+
+    open func setPage(_ index: Int) {
+        guard index != currentPageIndex && controllerArray.indices.contains(index) else {
+            return
+        }
+
+        startingPageForScroll = index
+        lastPageIndex = currentPageIndex
+        currentPageIndex = index
+
+        addPageAtIndex(index)
+
+        let xOffset = CGFloat(index) * controllerScrollView.frame.width
+        let offset = CGPoint(x: xOffset, y: controllerScrollView.contentOffset.y)
+        controllerScrollView.setContentOffset(offset, animated: false)
+
+        removePageAtIndex(lastPageIndex)
+    }
 }
